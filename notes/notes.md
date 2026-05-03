@@ -99,3 +99,8 @@ While looking through some of the examples I came across the `LevelDetector` and
 It looks like the LevelDetector is designed for audio levels, however I imagine this could be generalised and used for light levels too.
 I will stick with my implementation, however it would be a point of interest to discuss this alternative route which could be pursued.
 It would seem preferable to have a single implementation of the thresholding logic, maybe with some more specific types inheriting from the generalised verison.
+
+Running an initial little test I hit a problem which kept me busy for a few minutes.
+I had assigned my new events the IDs 1 and 2, which turned out to already be being used in the display's "event space". This led to my callbacks being called constantly.
+There didn't seem to be a central location for mapping IDs, which means that clashes like these are easy to cause.
+I eventually picked 4 and 5 arbitrarily, which seemed to work, but of course this could cause bugs in future if a new feature used these without realising they were already taken.

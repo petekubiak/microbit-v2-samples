@@ -1,16 +1,17 @@
 #include "MicroBit.h"
+#include "MicroBitCompat.h"
 // #include "samples/Tests.h"
 
 MicroBit uBit;
 
 static void onLight(MicroBitEvent)
 {
-    uBit.serial.printf("BRIGHT LIGHT!");
+    uBit.serial.printf("BRIGHT LIGHT!\r\n");
 }
 
 static void onDark(MicroBitEvent)
 {
-    uBit.serial.printf("Hey who turned out the lights?");
+    uBit.serial.printf("Hey who turned out the lights?\r\n");
 }
 
 int main()
@@ -20,7 +21,7 @@ int main()
     uBit.display.setDisplayMode(DisplayMode::DISPLAY_MODE_BLACK_AND_WHITE_LIGHT_SENSE);
 
     uBit.messageBus.listen(MICROBIT_ID_DISPLAY, MICROBIT_DISPLAY_EVT_LIGHT_LEVEL_HIGH, onLight);
-    uBit.messageBus.listen(MICROBIT_ID_DISPLAY, MICROBIT_DISPLAY_EVT_LIGHT_LEVEL_DARK, onDark);
+    uBit.messageBus.listen(MICROBIT_ID_DISPLAY, MICROBIT_DISPLAY_EVT_LIGHT_LEVEL_LOW, onDark);
 
     while(1)
     {
