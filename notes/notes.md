@@ -118,4 +118,7 @@ Therefore, I've implemented a little loop which plugs different frequencies and 
 To achieve silences, I've just set the frequency to 0.
 There is a volume field in the SoundEffect, however this would require a third array, so I've settled for using a frequency of 0 instead.
 
+Thirdly, multiple tones are often played simultaneously, or overlap.
+I can somewhat mimic this with a second synthesiser, but it's somewhat limited.
+If I had more time I think getting the MicroSynth working would be the best way to get an authentic music box sound.
 
