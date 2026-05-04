@@ -4,18 +4,51 @@
 #include "Synthesizer.h"
 #include "SoundSynthesizerEffects.h"
 
+#define SIL 0.0f
+#define B5  987.77f
+#define D6  1174.66f
+#define FS6 1479.98f
+#define G6  1567.98f
+#define A6  1760.0f
+
+const int beat = 200;
+
+const float melody[] = {
+    FS6, G6, FS6, D6, FS6, SIL,
+    FS6, G6, FS6, D6, FS6, SIL,
+    FS6, G6, FS6, D6, FS6, SIL,
+    FS6, G6, FS6, D6, B5, SIL,
+    FS6, G6, FS6, D6, FS6, SIL,
+    FS6, G6, A6, G6, FS6, SIL,
+    FS6, G6, FS6, D6, FS6, SIL,
+    SIL
+};
+
+const int durations[] = {
+    beat, beat, beat, beat, beat * 4, beat * 8,
+    beat, beat, beat, beat, beat * 4, beat * 8,
+    beat, beat, beat, beat, beat * 4, beat * 8,
+    beat, beat, beat, beat, beat * 4, beat * 8,
+    beat, beat, beat, beat, beat * 4, beat * 8,
+    beat, beat, beat, beat, beat * 4, beat * 8,
+    beat, beat, beat, beat, beat * 4, beat * 8,
+    beat * 12
+};
+
 MicroBit uBit;
+
+static bool musicBoxOpen = false;
 
 static void onLight(MicroBitEvent)
 {
     uBit.serial.printf("BRIGHT LIGHT!\r\n");
-    uBit.audio.soundExpressions.playAsync("002373041050001000392300001023010802050005000000000000000000000000000000");
+    musicBoxOpen = true;
 }
 
 static void onDark(MicroBitEvent)
 {
     uBit.serial.printf("Hey who turned out the lights?\r\n");
-    uBit.audio.soundExpressions.stop();
+    musicBoxOpen = false;
 }
 
 int main()
@@ -33,15 +66,25 @@ int main()
     ManagedBuffer b(sizeof(SoundEffect));
     SoundEffect *fx = (SoundEffect *)&b[0];
 
-    fx->duration = 1000;
     fx->tone.tonePrint = Synthesizer::SquareWaveTone;
-    fx->frequency = 130.81f;
     fx->volume = 1.0f;
+
+    int counter = 0;
+    int counterMax = sizeof(melody) / sizeof(melody[0]);
 
     while(1)
     {
-        synth->play(b);
-        uBit.sleep(1000);
+        if (musicBoxOpen)
+        {
+            fx->duration = durations[counter];
+            fx->frequency = melody[counter];
+            synth->play(b);
+            counter = (counter + 1) % counterMax;
+        }
+        else
+        {
+            uBit.sleep(100);
+        }
     }
 
     microbit_panic( 999 );

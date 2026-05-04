@@ -105,3 +105,17 @@ I had assigned my new events the IDs 1 and 2, which turned out to already be bei
 There didn't seem to be a central location for mapping IDs, which means that clashes like these are easy to cause.
 I eventually picked 4 and 5 arbitrarily, which seemed to work, but of course this could cause bugs in future if a new feature used these without realising they were already taken.
 
+The next step is to write the audio part of the demo.
+I played around with a few ways to try and get the audio working, with limited success.
+I know there are ways to sample and synthesise complex waveforms, and I did have a brief look at the MicroSynth, but ultimately I fell back on simple square waves.
+I was finally able to get it to play a tune by creating a SoundEmojiSynthesizer and getting it to play SoundEffects.
+The exercise said to pay careful attention to the way a music box sounds, and there are three important things I want to achieve here.
+
+Firstly, the sound should be a high pitch, to emulate the tinkly sound of a music box.
+Second, the tune will pick up from wherever it last got to.
+This means that I can't just plug an array of SoundEffects into the SoundEmojiSynthesizer, as it has no "pause" functionality, so would always start again from the beginning.
+Therefore, I've implemented a little loop which plugs different frequencies and durations into a single SoundEffect and then plays it.
+To achieve silences, I've just set the frequency to 0.
+There is a volume field in the SoundEffect, however this would require a third array, so I've settled for using a frequency of 0 instead.
+
+
