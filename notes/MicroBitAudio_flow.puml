@@ -1,0 +1,21 @@
+@startuml
+component "ADC channel (mic)" as adc
+component "Stream splitter (rawSplitter)" as raw
+component "Stream normalizer (processor)" as proc
+component "SPL level detector (levelSPL)" as spl
+component "Stream splitter (splitter)" as split
+
+component "PWM"
+component "mixer"
+
+adc -> raw
+raw -down-> proc
+raw -> spl
+proc -> split
+
+mixer -> PWM
+[synth] -> mixer
+PWM -> [Output pin (pin)]
+PWM -down-> [Speaker pin (speaker)]
+
+@enduml
