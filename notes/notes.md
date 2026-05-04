@@ -104,3 +104,4 @@ Running an initial little test I hit a problem which kept me busy for a few minu
 I had assigned my new events the IDs 1 and 2, which turned out to already be being used in the display's "event space". This led to my callbacks being called constantly.
 There didn't seem to be a central location for mapping IDs, which means that clashes like these are easy to cause.
 I eventually picked 4 and 5 arbitrarily, which seemed to work, but of course this could cause bugs in future if a new feature used these without realising they were already taken.
+
