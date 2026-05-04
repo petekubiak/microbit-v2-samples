@@ -39,7 +39,7 @@ const float melody[] = {
 const float accompaniment[] = {
     SIL, SIL, SIL, SIL, B4, D5, FS5, D5, B4, SIL,
     SIL, SIL, SIL, SIL, AS4, D5, FS5, D5, AS4, SIL,
-    SIL, SIL, SIL, SIL, A4, D5, FS4, D5, A4, SIL,
+    SIL, SIL, SIL, SIL, A4, D5, FS5, D5, A4, SIL,
     SIL, SIL, SIL, SIL, G4, B4, E5, B4, G4, SIL,
     SIL, SIL, SIL, SIL, B4, D5, FS5, D5, B4, SIL,
     SIL, SIL, SIL, SIL, FS4, AS4, CS5, AS4, FS4, SIL,
@@ -81,6 +81,7 @@ int main()
     uBit.init();
 
     uBit.display.setDisplayMode(DisplayMode::DISPLAY_MODE_BLACK_AND_WHITE_LIGHT_SENSE);
+    uBit.display.setLightLevelThreshold(1);
 
     uBit.messageBus.listen(MICROBIT_ID_DISPLAY, MICROBIT_DISPLAY_EVT_LIGHT_LEVEL_HIGH, onLight);
     uBit.messageBus.listen(MICROBIT_ID_DISPLAY, MICROBIT_DISPLAY_EVT_LIGHT_LEVEL_LOW, onDark);
@@ -91,7 +92,7 @@ int main()
     ManagedBuffer melodyBuffer(sizeof(SoundEffect));
     SoundEffect *melodyFx = (SoundEffect *)&melodyBuffer[0];
 
-    melodyFx->tone.tonePrint = Synthesizer::SquareWaveTone;
+    melodyFx->tone.tonePrint = Synthesizer::SawtoothTone;
     melodyFx->volume = 1.0f;
 
     SoundEmojiSynthesizer * accSynth = new SoundEmojiSynthesizer(6);
@@ -100,7 +101,7 @@ int main()
     ManagedBuffer accBuffer(sizeof(SoundEffect));
     SoundEffect *accFx = (SoundEffect *)&accBuffer[0];
 
-    accFx->tone.tonePrint = Synthesizer::SquareWaveTone;
+    accFx->tone.tonePrint = Synthesizer::SawtoothTone;
     accFx->volume = 1.0f;
 
     int counter = 0;

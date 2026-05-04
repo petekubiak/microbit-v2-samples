@@ -122,3 +122,30 @@ Thirdly, multiple tones are often played simultaneously, or overlap.
 I can somewhat mimic this with a second synthesiser, but it's somewhat limited.
 If I had more time I think getting the MicroSynth working would be the best way to get an authentic music box sound.
 
+## Part 2
+I had initially answered the question about the meaning of "push" and "pull" in the context of electronics, however the question was actually intending to ask about the context of an audio pipeline.
+I had noticed a number of references to "pull" in the various parts of the audio pipeline of the micro:bit - worth looking into these further once I've got some notes down about the core concepts.
+
+### Push model
+The pipeline is driven by the audio source.
+As soon as new samples are ready, they are pushed into the pipeline which drives samples downstream.
+This might be most useful for applications where low latency is required, e.g. real time streaming.
+
+### Pull model
+The pipeline is driven by the audio sink.
+The sink requests a new sample, which pulls samples through the pipeline.
+This is commonly used by DACs which operate at a fixed clock rate, requiring one sample per tick.
+This will cause higher latency, as audio is buffered, but is much better suited to mixing as timing of new samples is predictable.
+
+While thinking about this I began to consider this in relation to backpressure, a mechanism to avoid a consumer being overwhelmed by the producer.
+The pull model has backpressure built in inherently, as it is the demand from the sink which pulls in new samples from the source.
+By contrast, the push model would need some form of backpressure mechanism to avoid this scenario.
+
+For a DAC, making sure that there are always samples available without also overwhelming the consumer is important to avoid audio glitches.
+
+Looking through the CODAL codebase, I can see that the Micro:bit uses a pull model.
+Each of the components of the audio pipeline have a `pull()` method, which is called by the downstream component when a new buffer is required.
+  
+There also seems to be a function call which goes the other way, a `pullRequest()` function which the upstream component calls on the downstream component.
+I'm not entirely sure what the purpose of this is, so it would be a good thing to discuss.
+Maybe it's informing the downstream component that data is available?
